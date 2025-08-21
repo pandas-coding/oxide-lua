@@ -1,8 +1,11 @@
 use std::{env, io};
 use std::fs::File;
 use std::io::Read;
+use crate::vm::instruction::Instruction;
+use crate::vm::opcodes::{OP_MODE_ABC, OP_MODE_ABX, OP_MODE_ASBX, OP_MODE_AX, OP_ARG_K, OP_ARG_N, OP_ARG_U};
 
 mod binary;
+mod vm;
 
 fn main() -> io::Result<()> {
     if env::args().count() > 1 { 
@@ -49,9 +52,61 @@ fn print_header(f: &binary::chunk::Prototype) {
 
 fn print_code(f: &binary::chunk::Prototype) {
     for pc in 0..f.code.len() {
-        let line = f.line_info.get(pc).map(|n| n.to_string()).unwrap_or(String::new());
-        println!("\t{}\t[{}]\t0x{:08X}", pc + 1, line, f.code[pc]);
+        let line = f.line_info.get(pc).map(|n| n.to_string()).unwrap_or(String::from("-"));
+        let instr = f.code[pc];
+        print!("\t{}\t[{}]\t{} \t", pc + 1, line, instr.opname());
+        print_operands(instr);
+        println!();
     }
+}
+
+fn print_operands(i: u32) {
+    match i.opmode() {
+        OP_MODE_ABC => print_abc(i),
+        OP_MODE_ABX => print_abx(i),
+        OP_MODE_ASBX => print_asbx(i),
+        OP_MODE_AX => print_ax(i),
+        _ => (),
+    }
+}
+
+fn print_abc(i: u32) {
+    let (a, b, c) = i.abc();
+    print!("{}", a);
+    if i.b_mode() != OP_ARG_N {
+        if b > 0xFF {
+            print!(" {}", -1 - (b & 0xFF))
+        } else {
+            print!(" {}", b)
+        }
+    }
+    if i.c_mode() != OP_ARG_N {
+        if c > 0xFF {
+            print!(" {}", -1 - (c & 0xFF))
+        } else {
+            print!(" {}", c)
+        }
+    }
+}
+
+fn print_abx(i: u32) {
+    let (a, bx) = i.a_bx();
+    print!("{}", a);
+    if i.b_mode() == OP_ARG_K {
+        print!(" {}", -1 - bx)
+    } else if i.b_mode() == OP_ARG_U {
+        print!(" {}", bx)
+    }
+}
+
+fn print_asbx(i: u32) {
+    let (a, sbx) = i.a_sbx();
+    print!("{} {}", a, sbx);
+}
+
+fn print_ax(i: u32) {
+    let ax = i.ax();
+    print!("{}", -1 - ax);
 }
 
 fn print_detail(f: &binary::chunk::Prototype) {
