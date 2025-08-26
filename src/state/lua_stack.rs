@@ -28,11 +28,7 @@ impl LuaStack {
     }
 
     pub fn abs_index(&self, idx: isize) -> isize {
-        if idx >= 0 {
-            idx
-        } else {
-            idx + self.top() + 1
-        }
+        if idx >= 0 { idx } else { idx + self.top() + 1 }
     }
 
     pub fn is_valid(&self, idx: isize) -> bool {

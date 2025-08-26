@@ -12,7 +12,7 @@ pub enum LuaValue {
 impl LuaValue {
     pub fn type_id(&self) -> i8 {
         use api::consts::*;
-        
+
         match self {
             LuaValue::Nil => LUA_TNIL,
             LuaValue::Boolean(_) => LUA_TBOOLEAN,

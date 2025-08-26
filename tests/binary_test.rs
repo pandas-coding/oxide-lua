@@ -11,7 +11,10 @@ mod common;
 fn binary_test() -> io::Result<()> {
     use common::binary_test;
 
-    println!("running binary_test root path: {:?}", std::env::current_dir()?);
+    println!(
+        "running binary_test root path: {:?}",
+        env::current_dir()?
+    );
 
     let filepath = env::current_dir()?.join(PathBuf::from(binary_test::LUAC_OUT_FILE_PATH));
     println!("filepath: {:?}", filepath);
