@@ -6,10 +6,7 @@ use oxide_lua::{
     vm::{self, instruction::Instruction, opcodes},
 };
 
-pub use binary_test::{
-    LUA_FILE_PATH,
-    LUAC_OUT_FILE_PATH,
-};
+pub use binary_test::{LUA_FILE_PATH, LUAC_OUT_FILE_PATH};
 
 pub fn list(f: &binary::chunk::Prototype) {
     binary_test::print_header(f);

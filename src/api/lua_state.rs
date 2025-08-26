@@ -1,4 +1,3 @@
-
 pub trait LuaState {
     /* basic stack manipulation */
     fn get_top(&self) -> isize;

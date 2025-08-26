@@ -18,7 +18,11 @@ pub fn list(f: &binary::chunk::Prototype) {
 /// print lua main header
 /// main <@hello_world.lua:0,0> (4 instructions)
 pub fn print_header(f: &binary::chunk::Prototype) {
-    let func_type = if f.line_defined > 0 { "function" } else { "main" };
+    let func_type = if f.line_defined > 0 {
+        "function"
+    } else {
+        "main"
+    };
     let vararg_flag = if f.is_vararg > 0 { "+" } else { "" };
     let source = f.source.as_ref().map(|x| x.as_str()).unwrap_or("");
     //let source = f.source.clone().unwrap_or(String::new());
@@ -36,7 +40,11 @@ pub fn print_header(f: &binary::chunk::Prototype) {
 
 pub fn print_code(f: &binary::chunk::Prototype) {
     for pc in 0..f.code.len() {
-        let line = f.line_info.get(pc).map(|n| n.to_string()).unwrap_or(String::new());
+        let line = f
+            .line_info
+            .get(pc)
+            .map(|n| n.to_string())
+            .unwrap_or(String::new());
         println!("\t{}\t[{}]\t0x{:08X}", pc + 1, line, f.code[pc]);
     }
 }
@@ -71,7 +79,13 @@ pub fn print_locals(f: &binary::chunk::Prototype) {
     println!("locals ({}):", n);
     for i in 0..n {
         let var = &f.loc_vars[i];
-        println!("\t{}\t{}\t{}\t{}", i, var.var_name, var.start_pc + 1, var.end_pc + 1);
+        println!(
+            "\t{}\t{}\t{}\t{}",
+            i,
+            var.var_name,
+            var.start_pc + 1,
+            var.end_pc + 1
+        );
     }
 }
 

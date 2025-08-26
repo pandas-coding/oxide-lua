@@ -7,10 +7,7 @@ pub struct Reader {
 
 impl Reader {
     pub fn new(data: Vec<u8>) -> Reader {
-        Reader {
-            data,
-            pos: 0,
-        }
+        Reader { data, pos: 0 }
     }
 
     /// read one byte
@@ -85,17 +82,45 @@ impl Reader {
     }
 
     pub fn check_header(&mut self) {
-        assert_eq!(self.read_bytes(4), chunk::LUA_SIGNATURE, "not a precompiled chunk!");
+        assert_eq!(
+            self.read_bytes(4),
+            chunk::LUA_SIGNATURE,
+            "not a precompiled chunk!"
+        );
         assert_eq!(self.read_byte(), chunk::LUAC_VERSION, "version mismatch!");
         assert_eq!(self.read_byte(), chunk::LUAC_FORMAT, "format mismatch!");
         assert_eq!(self.read_bytes(6), chunk::LUAC_DATA, "corrupted!");
         assert_eq!(self.read_byte(), chunk::CINT_SIZE, "int size mismatch!");
-        assert_eq!(self.read_byte(), chunk::CSIZET_SIZE, "size_t size mismatch!");
-        assert_eq!(self.read_byte(), chunk::LUA_INSTRUCTION_SIZE, "instruction size mismatch!");
-        assert_eq!(self.read_byte(), chunk::LUA_INTEGER_SIZE, "lua_Integer size mismatch!");
-        assert_eq!(self.read_byte(), chunk::LUA_NUMBER_SIZE, "lua_Number size mismatch!");
-        assert_eq!(self.read_lua_integer(), chunk::LUAC_INT, "endianness mismatch!");
-        assert_eq!(self.read_lua_number(), chunk::LUAC_NUM, "float format mismatch!");
+        assert_eq!(
+            self.read_byte(),
+            chunk::CSIZET_SIZE,
+            "size_t size mismatch!"
+        );
+        assert_eq!(
+            self.read_byte(),
+            chunk::LUA_INSTRUCTION_SIZE,
+            "instruction size mismatch!"
+        );
+        assert_eq!(
+            self.read_byte(),
+            chunk::LUA_INTEGER_SIZE,
+            "lua_Integer size mismatch!"
+        );
+        assert_eq!(
+            self.read_byte(),
+            chunk::LUA_NUMBER_SIZE,
+            "lua_Number size mismatch!"
+        );
+        assert_eq!(
+            self.read_lua_integer(),
+            chunk::LUAC_INT,
+            "endianness mismatch!"
+        );
+        assert_eq!(
+            self.read_lua_number(),
+            chunk::LUAC_NUM,
+            "float format mismatch!"
+        );
     }
 
     pub fn read_proto(&mut self) -> chunk::Prototype {
@@ -115,8 +140,8 @@ impl Reader {
             constants: self.read_vec(|r| r.read_constant()),
             upvalues: self.read_vec(|r| r.read_upvalue()),
             protos: self.read_vec(|r| r.read_proto0(source.clone())),
-            line_info: self.read_vec(|r| r.read_u32()),        // debug
-            loc_vars: self.read_vec(|r| r.read_loc_var()),     // debug
+            line_info: self.read_vec(|r| r.read_u32()), // debug
+            loc_vars: self.read_vec(|r| r.read_loc_var()), // debug
             upvalue_names: self.read_vec(|r| r.read_string()), // debug
         }
     }

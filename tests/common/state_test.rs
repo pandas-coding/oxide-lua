@@ -1,12 +1,12 @@
 use oxide_lua::{
-    self, 
+    self,
     api::{self, LuaAPI},
     state::LuaState,
 };
 
 pub fn print_stack(ls: &LuaState) {
     use api::consts::*;
-    
+
     let top = ls.get_top();
     for i in 1..top + 1 {
         let t = ls.type_id(i);

@@ -45,7 +45,6 @@ struct Header {
     luac_num: f64,
 }
 
-
 /// function prototype
 pub struct Prototype {
     pub source: Option<String>, // debug
@@ -60,7 +59,7 @@ pub struct Prototype {
     pub protos: Vec<Prototype>,
     pub line_info: Vec<u32>,        // debug
     pub loc_vars: Vec<LocVar>,      // debug
-    pub upvalue_names: Vec<String>, // debug 
+    pub upvalue_names: Vec<String>, // debug
 }
 
 pub struct Upvalue {
