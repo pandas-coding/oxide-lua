@@ -48,6 +48,24 @@ pub fn shift_right(a: i64, n: i64) -> i64 {
     }
 }
 
+pub fn float_to_integer(n: f64) -> Option<i64> {
+    let i = n as i64;
+    match i as f64 == n {
+        true => Some(i),
+        false => None,
+    }
+}
+
+pub fn string_to_integer(s: &String) -> Option<i64> {
+    match s.parse::<i64>() {
+        Ok(i) => Some(i),
+        Err(_) => match s.parse::<f64>() {
+            Ok(n) => float_to_integer(n),
+            Err(_) => None,
+        },
+    }
+}
+
 fn is_positive_infinite(n: f64) -> bool {
     n.is_infinite() && n.is_sign_positive()
 }

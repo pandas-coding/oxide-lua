@@ -1,4 +1,5 @@
 use crate::api::{self};
+use crate::number;
 
 #[derive(Clone)]
 pub enum LuaValue {
@@ -27,6 +28,26 @@ impl LuaValue {
             LuaValue::Nil => false,
             LuaValue::Boolean(b) => *b, // TODO
             _ => true,
+        }
+    }
+
+    // http://www.lua.org/manual/5.3/manual.html#3.4.3
+    pub fn to_number(&self) -> Option<f64> {
+        match self {
+            LuaValue::Integer(i) => Some(*i as f64),
+            LuaValue::Number(n) => Some(*n),
+            LuaValue::Str(s) => s.parse::<f64>().ok(), // TODO
+            _ => None,
+        }
+    }
+
+    // http://www.lua.org/manual/5.3/manual.html#3.4.3
+    pub fn to_integer(&self) -> Option<i64> {
+        match self {
+            LuaValue::Integer(i) => Some(*i),
+            LuaValue::Number(n) => number::math::float_to_integer(*n),
+            LuaValue::Str(s) => number::math::string_to_integer(s),
+            _ => None,
         }
     }
 }
