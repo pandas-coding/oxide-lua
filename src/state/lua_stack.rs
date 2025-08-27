@@ -1,4 +1,4 @@
-use crate::state::lua_values::LuaValue;
+use crate::state::lua_value::LuaValue;
 
 pub struct LuaStack {
     vec: Vec<LuaValue>,

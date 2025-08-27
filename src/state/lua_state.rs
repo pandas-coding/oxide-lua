@@ -1,6 +1,6 @@
 use crate::api::{self, LuaAPI, consts};
 use crate::state::lua_stack::LuaStack;
-use crate::state::lua_values::LuaValue;
+use crate::state::lua_value::LuaValue;
 
 pub struct LuaState {
     stack: LuaStack,
