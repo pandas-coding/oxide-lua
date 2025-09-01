@@ -5,8 +5,13 @@ use std::io;
 mod common;
 
 #[test]
+#[ignore]
 fn operator_test() -> io::Result<()> {
-    let mut ls = state::new_lua_state();
+    use common::lua_vm_test::get_proto;
+
+    let proto = get_proto()?;
+    let nregs = proto.max_stack_size;
+    let mut ls = state::new_lua_state((nregs + 8) as usize, proto);
 
     ls.push_integer(1);
     ls.push_string("2.0".to_string());

@@ -5,7 +5,8 @@ mod lua_state;
 mod lua_value;
 
 pub use lua_state::LuaState;
+use crate::binary::chunk::Prototype;
 
-pub fn new_lua_state() -> LuaState {
-    LuaState::new()
+pub fn new_lua_state(stack_size: usize, proto: Prototype) -> LuaState {
+    LuaState::new(stack_size, proto)
 }

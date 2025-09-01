@@ -6,7 +6,11 @@ mod common;
 
 #[test]
 fn state_test() -> io::Result<()> {
-    let mut ls = state::new_lua_state();
+    use common::lua_vm_test::get_proto;
+    
+    let proto = get_proto()?;
+    let nregs = proto.max_stack_size;
+    let mut ls = state::new_lua_state((nregs + 8) as usize, proto);
 
     ls.push_boolean(true);
     print_stack(&ls);
